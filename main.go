@@ -16,10 +16,11 @@ func main() {
 	configs.Init()
 	database.Init()
 
-	e.Logger.Fatal(e.Start(":1323"))
-
-	// gormQuery.CreateUser()
+	//gormQuery.CreateUser()
 	//gormQuery.GetAll()
 
-	// gormQuery.UpdatedById()
+	//gormQuery.UpdatedById()
+
+	e.Logger.Fatal(e.Start(":1323"))
+
 }
