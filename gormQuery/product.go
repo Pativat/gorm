@@ -1,1 +1,5 @@
 package gormQuery
+
+func Createproduct() {
+
+}

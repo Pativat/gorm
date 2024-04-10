@@ -1,10 +1,16 @@
 package productmodel
 
+import "time"
+
 type Product struct {
-	ProductID         int     `json:"product_id" gorm:"column:product_id"`
-	ProductCategoryID int     `json:"product_category_id" gorm:"column:product_category_id"`
-	ProductName       string  `json:"product_name" gorm:"column:product_name"`
-	ProductPrice      float64 `json:"product_price" gorm:"column:product_price"`
+	Id         int        `json:"id" gorm:"id"`
+	Name       string     `json:"name" gorm:"name"`
+	Price      int        `json:"price" gorm:"price"`
+	Status     string     `json:"status" gorm:"status"`
+	Created_at *time.Time `json:"created_at " gorm:"created_at"`
+	Created_by string     `json:"created_by" gorm:"created_by"`
+	Updated_by *time.Time `json:"updated_by" gorm:"updated_by"`
+	Deleted_at *time.Time `json:"deleted_at" gorm:"deleted_at"`
 }
 
 func (Product) TableName() string {

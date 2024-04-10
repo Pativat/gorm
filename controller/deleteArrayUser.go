@@ -4,34 +4,24 @@ import (
 	"gorm/database"
 	"gorm/models/userModel"
 	"log"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
-func GetLimitUser(ctx echo.Context) error {
+func DeleteArrayUser(ctx echo.Context) error {
 
-	getlimit := ctx.Param("limit")
-
-	getlimit1, _ := strconv.Atoi(getlimit)
+	Id_user := ctx.Param("User_id")
 
 	userModelHelper := userModel.UserModelHelper{DB: database.DBMYSQL}
-
-	user, err := userModelHelper.GetUserLimit(getlimit1)
+	user, err := userModelHelper.DeletedArray(Id_user)
 
 	if err != nil {
-		log.Println("Error getting user limit")
-	} else {
-
-		for _, v := range user {
-
-			log.Println("User :", v)
-		}
-
+		log.Println("Error Delete array")
 	}
 
 	return ctx.JSON(200, map[string]interface{}{
 		"name":    user,
 		"message": "success",
 	})
+
 }
