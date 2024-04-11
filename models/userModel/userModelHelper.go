@@ -156,12 +156,14 @@ func (u *UserModelHelper) GetAllUsersP(limit, page int) ([]User, int64, error) {
 	var users []User
 	var count int64
 
+	tx := u.DB.Begin()
+
 	if limit == 0 {
 		limit = 10
 	}
 
 	offset := (page - 1) * limit
-	err := u.DB.Debug().Table("user").Limit(limit).Offset(offset).Find(&users).Error
+	err := tx.Debug().Table("user").Limit(limit).Offset(offset).Find(&users).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -179,7 +181,7 @@ func (u *UserModelHelper) GetUserOrder([]UserFill) ([]OrderList, int, error) {
 	var order []OrderList
 
 	var count int64
-	// err := u.DB.Table("user").Select("user.id,user.firstname,order.order_date").Joins("left join order on user.id = order.user_id").Find(&user).Error
+
 	pipeline := "SELECT `order`.id ,user.firstname ,product_order.quantity ,product.name ,  user.id  AS user_id , order_date FROM user inner join `order` on user.id = `order`.user_id inner join product_order on  `order`.id = product_order.order_id inner join product on product_order.product_id = product.id"
 
 	if err := u.DB.Debug().Raw(pipeline).Find(&order).Error; err != nil {
@@ -202,6 +204,20 @@ func (u *UserModelHelper) CreateTableBank() error {
 	if err != nil {
 		return err
 	}
+	return nil
+
+}
+
+func (u *UserModelHelper) InsertArrayBank([]Bank) error {
+
+	bank := []Bank{}
+	tx := u.DB.Begin()
+
+	if err := tx.Create(&bank).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
 	return nil
 
 }
