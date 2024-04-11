@@ -20,18 +20,16 @@ func GetLimitUser(ctx echo.Context) error {
 	user, err := userModelHelper.GetUserLimit(getlimit1)
 
 	if err != nil {
-		log.Println("Error getting user limit")
-	} else {
-
-		for _, v := range user {
-
-			log.Println("User :", v)
-		}
-
+		log.Println("Cannot Get User")
 	}
 
+	count, err := userModelHelper.GetCountUser(user)
+	if err != nil {
+		log.Println("Cannot get Count User")
+	}
 	return ctx.JSON(200, map[string]interface{}{
 		"name":    user,
+		"count":   count,
 		"message": "success",
 	})
 }

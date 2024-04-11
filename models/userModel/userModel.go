@@ -23,3 +23,55 @@ type FilterData struct {
 	Firstname string `json:"firstname" gorm:"column:firstname" query:"firstname"`
 	Lastname  string `json:"lastname" gorm:"lastname" query:"lastname"`
 }
+
+//	type Userfunc interface {
+//		GetUserById(Id string) (User, error)
+//	}
+
+type UserFill struct {
+	Id         string     `json:"id" `
+	User_id    string     `json:"user_id"`
+	Firstname  string     `json:"firstname"`
+	Quantity   int        `json:"quantity"`
+	Name       string     `json:"name"`
+	Order_date *time.Time `json:"order_date"`
+}
+
+type UserList struct {
+	Id        string `json:"id"`
+	Firstname string `json:"firstname"`
+}
+type OrderList struct {
+	Id         string     `json:"id"`
+	User_id    string     `json:"user_id"`
+	Firstname  string     `json:"first_name"`
+	Quantity   int        `json:"quantity"`
+	Name       string     `json:"product_name"`
+	Order_date *time.Time `json:"order_date"`
+}
+
+type NewOrder struct {
+	Id         string     `json:"id"`
+	User_id    string     `json:"user_id"`
+	Firstname  string     `json:"user_name"`
+	Quantity   int        `json:"quantity"`
+	Name       string     `json:"product_name"`
+	Order_date *time.Time `json:"order_date"`
+}
+
+type Userinter interface {
+	GetUserOrder(UserFill) ([]User, int, error)
+}
+
+type Bank struct {
+	Id           string `json:"id" gorm:"primaryKey;autoIncrement;not null" `
+	Bank_name    string `json:"bank_name" gorm:"bank_name"`
+	Bank_address string `json:"bank_address" gorm:"bank_address"`
+	Bank_image   string `json:"bank_image" gorm:"bank_image"`
+	Bank_type    string `json:"bank_type" gorm:"bank_type"`
+	Bank_status  string `json:"bank_status" gorm:"bank_status"`
+}
+
+func (Bank) TableName() string {
+	return "bank"
+}

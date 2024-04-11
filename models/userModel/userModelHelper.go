@@ -10,6 +10,10 @@ type UserModelHelper struct {
 	DB *gorm.DB
 }
 
+func NewUserModelHelper(db *gorm.DB) *UserModelHelper {
+	return &UserModelHelper{db}
+}
+
 func (u *UserModelHelper) Insert(user *User) error {
 	result := u.DB.Debug().Create(&user)
 	if result.Error != nil {
@@ -48,11 +52,11 @@ func (u *UserModelHelper) UpdatedUserById() (*User, error) {
 	return &user, nil
 }
 
-func (u *UserModelHelper) GetUserLimit(limit int) ([]*User, error) {
+func (u *UserModelHelper) GetUserLimit(limit int) ([]User, error) {
 
-	user := []*User{}
+	user := []User{}
 
-	result := u.DB.Limit(limit).Offset(0).Find(&user)
+	result := u.DB.Debug().Limit(limit).Offset(0).Find(&user)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -87,9 +91,9 @@ func (u *UserModelHelper) DeletedArray(User_id string) ([]*User, error) {
 	return user, nil
 }
 
-func (u *UserModelHelper) UpdatedArray(User_id string, users []User) ([]*User, error) {
+func (u *UserModelHelper) UpdatedArray(User_id string, users []User) ([]User, error) {
 
-	var updatedUsers []*User
+	var updatedUsers []User
 	tx := u.DB.Begin()
 
 	for _, user := range users {
@@ -101,7 +105,7 @@ func (u *UserModelHelper) UpdatedArray(User_id string, users []User) ([]*User, e
 			return nil, result.Error
 
 		}
-		updatedUsers = append(updatedUsers, &user)
+		updatedUsers = append(updatedUsers, user)
 	}
 	tx.Commit()
 	return updatedUsers, nil
@@ -110,7 +114,7 @@ func (u *UserModelHelper) UpdatedArray(User_id string, users []User) ([]*User, e
 func (u *UserModelHelper) GetUserFilter(filterData FilterData) ([]*User, error) {
 	user := []*User{}
 	tx := u.DB.Begin()
-	result := tx.Debug().Where("firstname LIKE ? AND lastname LIKE ?", "%"+filterData.Firstname+"%", "%"+filterData.Lastname+"%").Limit(filterData.Limit).Find(&user)
+	result := tx.Debug().Where("firstname LIKE ? AND lastname LIKE ?", "%"+filterData.Firstname+"%", "%"+filterData.Lastname+"%").Limit(filterData.Limit).Offset(filterData.Page).Find(&user)
 
 	if result.Error != nil {
 		tx.Rollback()
@@ -118,4 +122,86 @@ func (u *UserModelHelper) GetUserFilter(filterData FilterData) ([]*User, error) 
 	}
 	tx.Commit()
 	return user, nil
+}
+
+func (u *UserModelHelper) GetCountUser([]User) (int64, error) {
+
+	user := []User{}
+	var c int64
+	tx := u.DB.Begin()
+	result := tx.Debug().Model(user).Count(&c)
+
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return c, nil
+
+}
+
+func (u *UserModelHelper) GetUserByPage(page int) ([]*User, error) {
+
+	user := []*User{}
+	tx := u.DB.Begin()
+
+	result := tx.Limit(10).Offset((page - 1) * 10).Find(&user)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return user, nil
+
+}
+
+func (u *UserModelHelper) GetAllUsersP(limit, page int) ([]User, int64, error) {
+	var users []User
+	var count int64
+
+	if limit == 0 {
+		limit = 10
+	}
+
+	offset := (page - 1) * limit
+	err := u.DB.Debug().Table("user").Limit(limit).Offset(offset).Find(&users).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	err = u.DB.Model(&User{}).Count(&count).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return users, count, nil
+}
+
+func (u *UserModelHelper) GetUserOrder([]UserFill) ([]OrderList, int, error) {
+
+	var order []OrderList
+
+	var count int64
+	// err := u.DB.Table("user").Select("user.id,user.firstname,order.order_date").Joins("left join order on user.id = order.user_id").Find(&user).Error
+	pipeline := "SELECT `order`.id ,user.firstname ,product_order.quantity ,product.name ,  user.id  AS user_id , order_date FROM user inner join `order` on user.id = `order`.user_id inner join product_order on  `order`.id = product_order.order_id inner join product on product_order.product_id = product.id"
+
+	if err := u.DB.Debug().Raw(pipeline).Find(&order).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err := u.DB.Model(&User{}).Count(&count).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return order, int(count), nil
+
+}
+
+func (u *UserModelHelper) CreateTableBank() error {
+
+	newbank := []Bank{}
+	err := u.DB.AutoMigrate(newbank)
+
+	if err != nil {
+		return err
+	}
+	return nil
+
 }

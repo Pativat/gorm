@@ -7,7 +7,7 @@ import (
 )
 
 func InitRouter(e *echo.Echo) {
-	e.GET("/", controller.Hello)
+
 	e.GET("/user", controller.GetAll)
 
 	e.GET("/user/:limit", controller.GetLimitUser)
@@ -16,6 +16,11 @@ func InitRouter(e *echo.Echo) {
 
 	e.PUT("/user/update/:User_id", controller.UpdatedArrayUser)
 
-	e.GET("/user/fil", controller.GetAllUsersFilter)
+	e.GET("/user/filter", controller.GetAllUsersFilter)
+	e.GET("/user/p/", controller.GetUserp)
+
+	e.GET("/user/order/", controller.GetAllOrder)
+
+	e.POST("/bank/create", controller.CreateTableBank)
 
 }
