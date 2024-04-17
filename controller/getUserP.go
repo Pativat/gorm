@@ -18,6 +18,15 @@ type FillGetUser struct {
 	Total_prev_page int `json:"total_prev_page"`
 }
 
+// @Tags User
+// @Summary Get users Limit Offset
+// @Description Get users from the database limit
+// @Accept json
+// @Produce json
+// @Param limit query int false "limit"
+// @Param page query int false "page"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /users/p/ [get]
 func GetUserp(ctx echo.Context) error {
 	userModelHelper := userModel.UserModelHelper{DB: database.DBMYSQL}
 	limitstr := ctx.QueryParam("limit")

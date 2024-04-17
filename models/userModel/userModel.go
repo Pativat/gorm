@@ -17,6 +17,20 @@ func (User) TableName() string {
 	return "user"
 }
 
+type UserInsert struct {
+	Firstname string `json:"firstname" example:"phat"`
+	Lastname  string `json:"lastname" example:"cha"`
+	Age       int    `json:"age" example:"21"`
+	Status    string `json:"status" example:"active"`
+}
+
+type UserDelete struct {
+	Firstname string `json:"firstname" example:"phat2"`
+	Lastname  string `json:"lastname" example:"cha2"`
+	Age       int    `json:"age" example:"22"`
+	Status    string `json:"status" example:"unactive"`
+}
+
 type FilterData struct {
 	Limit     int    `json:"limit" gorm:"limit" query:"limit"`
 	Page      int    `json:"page"  gorm:"column:page" query:"page"`

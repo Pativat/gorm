@@ -1,0 +1,186 @@
+basePath: /
+definitions:
+  helper.SuccessResponse:
+    properties:
+      code:
+        example: 200
+        type: integer
+      message:
+        example: OK
+        type: string
+    type: object
+  userModel.UserDelete:
+    properties:
+      age:
+        example: 22
+        type: integer
+      firstname:
+        example: phat2
+        type: string
+      lastname:
+        example: cha2
+        type: string
+      status:
+        example: unactive
+        type: string
+    type: object
+  userModel.UserInsert:
+    properties:
+      age:
+        example: 21
+        type: integer
+      firstname:
+        example: phat
+        type: string
+      lastname:
+        example: cha
+        type: string
+      status:
+        example: active
+        type: string
+    type: object
+host: localhost:1323
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Your-Project Document
+  version: "1.0"
+paths:
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get all users from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Get all users
+      tags:
+      - User
+  /user/delete/{User_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete users from the database
+      parameters:
+      - description: ID ของผู้ใช้
+        in: path
+        name: User_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Delete users
+      tags:
+      - User
+  /user/insert:
+    post:
+      consumes:
+      - application/json
+      description: Insert all users from the database
+      parameters:
+      - description: Array User to insert
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/userModel.UserInsert'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response insert
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Insert Array User
+      tags:
+      - User
+  /user/update/{User_id}:
+    put:
+      consumes:
+      - application/json
+      description: Update users from the database
+      parameters:
+      - description: ID ของผู้ใช้
+        in: path
+        name: User_id
+        required: true
+        type: string
+      - description: Delete User to insert
+        in: body
+        name: Request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/userModel.UserDelete'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Update users by Id
+      tags:
+      - User
+  /users/order/:
+    get:
+      consumes:
+      - application/json
+      description: Get users from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Get users Join Table
+      tags:
+      - User
+  /users/p/:
+    get:
+      consumes:
+      - application/json
+      description: Get users from the database limit
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Get users Limit Offset
+      tags:
+      - User
+schemes:
+- https
+swagger: "2.0"

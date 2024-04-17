@@ -10,11 +10,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// @Tags User
+// @Summary Insert Array User
+// @Description Insert all users from the database
+// @Accept json
+// @Produce json
+// @Param Request body []userModel.UserInsert true "Array User to insert"
+// @Response 200 {object} helper.SuccessResponse "Success response insert"
+// @Router /user/insert [post]
 func InsertArrayUser(ctx echo.Context) error {
 	userModelHelper := userModel.UserModelHelper{DB: database.DBMYSQL}
 	now := time.Now()
 
-	data := []userModel.User{}
+	data := []userModel.UserInsert{}
 
 	if err := ctx.Bind(&data); err != nil {
 		log.Println("Error bind data:", err)
@@ -23,10 +31,17 @@ func InsertArrayUser(ctx echo.Context) error {
 
 	users := []userModel.User{}
 
-	for _, user := range data {
-		user.Id = helper.GenerateUUID()
-		user.CreatedAt = &now
-		user.UpdatedAt = &now
+	for _, userData := range data {
+		user := userModel.User{
+			Id:        helper.GenerateUUID(),
+			Firstname: userData.Firstname,
+			Lastname:  userData.Lastname,
+			Age:       userData.Age,
+			CreatedAt: &now,
+			UpdatedAt: &now,
+			DeletedAt: nil,
+			Status:    userData.Status,
+		}
 
 		//users[index] = user
 		users = append(users, user)
@@ -42,9 +57,3 @@ func InsertArrayUser(ctx echo.Context) error {
 		"message": "success",
 	})
 }
-
-// func InsertArrayUser2(ctx echo.Context) error {
-// 	userModel := userModel.UserModelHelper{DB: database.DBMYSQL}
-
-// 	return nil
-// }

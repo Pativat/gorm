@@ -8,6 +8,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// @Tags User
+// @Summary Get users Join Table
+// @Description Get users from the database
+// @Accept json
+// @Produce json
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /users/order/ [get]
 func GetAllOrder(ctx echo.Context) error {
 	Filuser := []userModel.UserFill{}
 
@@ -23,19 +30,19 @@ func GetAllOrder(ctx echo.Context) error {
 		log.Println("Error retrieving user orders:", err)
 		return err
 	}
-	OrderNew := make([]userModel.NewOrder, len(user))
+	// OrderNew := make([]userModel.NewOrder, len(user))
 
-	for idx, i := range user {
-		newOrder := userModel.NewOrder{
-			Id:         i.Id,
-			User_id:    i.User_id,
-			Firstname:  i.Firstname,
-			Quantity:   i.Quantity,
-			Name:       i.Name,
-			Order_date: i.Order_date,
-		}
-		OrderNew[idx] = newOrder
-	}
+	// for idx, i := range user {
+	// 	newOrder := userModel.NewOrder{
+	// 		Id:         i.Id,
+	// 		User_id:    i.User_id,
+	// 		Firstname:  i.Firstname,
+	// 		Quantity:   i.Quantity,
+	// 		Name:       i.Name,
+	// 		Order_date: i.Order_date,
+	// 	}
+	// 	OrderNew[idx] = newOrder
+	// }
 	// for _, i := range user {
 	// 	newOrder := userModel.OrderList{
 	// 		Id:         i.Id,

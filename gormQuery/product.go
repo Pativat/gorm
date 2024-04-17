@@ -1,5 +1,0 @@
-package gormQuery
-
-func Createproduct() {
-
-}
