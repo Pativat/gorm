@@ -79,6 +79,89 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/filter": {
+            "get": {
+                "description": "Get users from the database Filter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user Filter data",
+                "parameters": [
+                    {
+                        "description": "Get user Filter data",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userModel.FilterData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/filter/name": {
+            "get": {
+                "description": "Get users from the database Filter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user Filter Name data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "fname",
+                        "name": "fname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "lname",
+                        "name": "lname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "schema": {
+                            "$ref": "#/definitions/helper.SuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/insert": {
             "post": {
                 "description": "Insert all users from the database",
@@ -89,9 +172,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Bank"
                 ],
-                "summary": "Insert Array User",
+                "summary": "Insert Array Bank",
                 "parameters": [
                     {
                         "description": "Array User to insert",
@@ -101,7 +184,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/userModel.UserInsert"
+                                "$ref": "#/definitions/userModel.BankInsert"
                             }
                         }
                     }
@@ -235,6 +318,43 @@ const docTemplate = `{
                 }
             }
         },
+        "userModel.BankInsert": {
+            "type": "object",
+            "properties": {
+                "bank_address": {
+                    "type": "string"
+                },
+                "bank_image": {
+                    "type": "string"
+                },
+                "bank_name": {
+                    "type": "string"
+                },
+                "bank_status": {
+                    "type": "string"
+                },
+                "bank_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "userModel.FilterData": {
+            "type": "object",
+            "properties": {
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                }
+            }
+        },
         "userModel.UserDelete": {
             "type": "object",
             "properties": {
@@ -285,7 +405,7 @@ var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:1323",
 	BasePath:         "/",
-	Schemes:          []string{"https"},
+	Schemes:          []string{"http"},
 	Title:            "Your-Project Document",
 	Description:      "This is a sample server.",
 	InfoInstanceName: "swagger",

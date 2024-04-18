@@ -111,8 +111,8 @@ func (u *UserModelHelper) UpdatedArray(User_id string, users []User) ([]User, er
 	return updatedUsers, nil
 }
 
-func (u *UserModelHelper) GetUserFilter(filterData FilterData) ([]*User, error) {
-	user := []*User{}
+func (u *UserModelHelper) GetUserFilter(filterData FilterData) ([]User, error) {
+	user := []User{}
 	tx := u.DB.Begin()
 	result := tx.Debug().Where("firstname LIKE ? AND lastname LIKE ?", "%"+filterData.Firstname+"%", "%"+filterData.Lastname+"%").Limit(filterData.Limit).Offset(filterData.Page).Find(&user)
 
@@ -221,3 +221,43 @@ func (u *UserModelHelper) InsertArrayBank([]Bank) error {
 	return nil
 
 }
+
+func (u *UserModelHelper) FilterUsername(fname, lname string, limit, page int) ([]User, int64, error) {
+
+	var count int64
+
+	user := []User{}
+	tx := u.DB.Begin()
+
+	// if limit == 0 {
+	// 	limit = 10
+
+	// }
+
+	// if page == 0 {
+	// 	page = 1
+	// }
+
+	offset := (page - 1) * limit
+
+	if err := tx.Debug().Where("firstname LIKE ? AND lastname LIKE ?", "%"+fname+"%", "%"+lname+"%").Limit(limit).Offset(offset).Find(&user).Error; err != nil {
+		tx.Rollback()
+		return nil, 0, err
+	}
+	if err := tx.Debug().Model(user).Count(&count).Error; err != nil {
+		tx.Rollback()
+		return nil, 0, err
+	}
+
+	tx.Commit()
+	return user, count, nil
+}
+
+// func (u *UserModelHelper) UpdateUser(User_id int) ([]User, error) {
+
+// 	user := []User{}
+// 	tx := u.DB.Begin()
+
+// 	err := tx.Model(user).Where("active= ?", true).Update("name", "hello")
+
+// }

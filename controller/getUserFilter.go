@@ -8,6 +8,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// @Tags User
+// @Summary Get user Filter data
+// @Description Get users from the database Filter
+// @Accept json
+// @Produce json
+// @Param Request body userModel.FilterData true "Get user Filter data"
+// @response 200 {object} helper.SuccessResponse "Success response"
+// @Router /user/filter [get]
 func GetAllUsersFilter(ctx echo.Context) error {
 
 	userModelHelper := userModel.UserModelHelper{DB: database.DBMYSQL}
@@ -18,10 +26,8 @@ func GetAllUsersFilter(ctx echo.Context) error {
 	// getfname := ctx.QueryParam("fname")
 	// getlname := ctx.QueryParam("lname")
 
-	err := ctx.Bind(&filterUser)
-
-	if err != nil {
-		log.Println("Error by data")
+	if err := ctx.Bind(&filterUser); err != nil {
+		log.Println("Error Bind")
 	}
 
 	user, _ := userModelHelper.GetUserFilter(filterUser)

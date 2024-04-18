@@ -23,7 +23,7 @@ import (
 //	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 //	@host			localhost:1323
 //	@BasePath		/
-//	@schemes		https
+//	@schemes		http
 
 func main() {
 

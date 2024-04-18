@@ -24,6 +24,14 @@ type UserInsert struct {
 	Status    string `json:"status" example:"active"`
 }
 
+type BankInsert struct {
+	Bank_name    string `json:"bank_name" gorm:"bank_name"`
+	Bank_address string `json:"bank_address" gorm:"bank_address"`
+	Bank_image   string `json:"bank_image" gorm:"bank_image"`
+	Bank_type    string `json:"bank_type" gorm:"bank_type"`
+	Bank_status  string `json:"bank_status" gorm:"bank_status"`
+}
+
 type UserDelete struct {
 	Firstname string `json:"firstname" example:"phat2"`
 	Lastname  string `json:"lastname" example:"cha2"`

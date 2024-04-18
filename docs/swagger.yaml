@@ -9,6 +9,30 @@ definitions:
         example: OK
         type: string
     type: object
+  userModel.BankInsert:
+    properties:
+      bank_address:
+        type: string
+      bank_image:
+        type: string
+      bank_name:
+        type: string
+      bank_status:
+        type: string
+      bank_type:
+        type: string
+    type: object
+  userModel.FilterData:
+    properties:
+      firstname:
+        type: string
+      lastname:
+        type: string
+      limit:
+        type: integer
+      page:
+        type: integer
+    type: object
   userModel.UserDelete:
     properties:
       age:
@@ -89,6 +113,60 @@ paths:
       summary: Delete users
       tags:
       - User
+  /user/filter:
+    get:
+      consumes:
+      - application/json
+      description: Get users from the database Filter
+      parameters:
+      - description: Get user Filter data
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/userModel.FilterData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Get user Filter data
+      tags:
+      - User
+  /user/filter/name:
+    get:
+      consumes:
+      - application/json
+      description: Get users from the database Filter
+      parameters:
+      - description: fname
+        in: query
+        name: fname
+        type: string
+      - description: lname
+        in: query
+        name: lname
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            $ref: '#/definitions/helper.SuccessResponse'
+      summary: Get user Filter Name data
+      tags:
+      - User
   /user/insert:
     post:
       consumes:
@@ -101,7 +179,7 @@ paths:
         required: true
         schema:
           items:
-            $ref: '#/definitions/userModel.UserInsert'
+            $ref: '#/definitions/userModel.BankInsert'
           type: array
       produces:
       - application/json
@@ -110,9 +188,9 @@ paths:
           description: Success response insert
           schema:
             $ref: '#/definitions/helper.SuccessResponse'
-      summary: Insert Array User
+      summary: Insert Array Bank
       tags:
-      - User
+      - Bank
   /user/update/{User_id}:
     put:
       consumes:
@@ -182,5 +260,5 @@ paths:
       tags:
       - User
 schemes:
-- https
+- http
 swagger: "2.0"
